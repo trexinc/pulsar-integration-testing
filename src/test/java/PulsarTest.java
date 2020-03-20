@@ -48,8 +48,9 @@ public class PulsarTest {
         Thread.sleep(2000);
 
         ContainerState consumerCS = (ContainerState)consumerEnv.getContainerByServiceName("main-consumer_1").get();
-        assertTrue(consumerCS.getLogs().contains("Got message from customer:"));
-        System.out.println("Main Consumer is receiving messages.");
+        assertTrue(consumerCS.getLogs().contains("Got message from customer: customer1"));
+        assertTrue(consumerCS.getLogs().contains("Got message from customer: customer2"));
+        System.out.println("Main Consumer is receiving messages from all producers.");
 
         System.out.println("Stopping all containers...");
         // Order is important, Pulsar can be only be stopped last as others use its network
