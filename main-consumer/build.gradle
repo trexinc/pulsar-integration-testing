@@ -1,0 +1,3 @@
+project.ext.set("{$project.name}-mainclass", 'MainConsumer')
+
+apply from: "../shared/build.gradle"

@@ -1,0 +1,3 @@
+rootProject.name = 'pulsar-integration-testing'
+include 'main-consumer'
+include 'customer-producer'

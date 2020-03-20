@@ -1,0 +1,45 @@
+apply plugin: 'com.palantir.docker'
+
+version = project.ext.productVersion
+def dependencyJarsDir = "dependency-jars"
+
+dependencies {
+    implementation group: 'org.apache.pulsar', name: 'pulsar-client', version: project.ext.pulsarVersion
+}
+
+task copyJarsToLib (type: Copy) {
+    def toDir = "build/libs/$dependencyJarsDir"
+
+    // create directories, if not already done:
+    file(toDir).mkdirs()
+
+    // copy jars to lib folder:
+    from configurations.runtimeClasspath
+    into toDir
+}
+
+jar {
+    // exclude log properties (recommended)
+    exclude ("log4j.properties")
+
+    // make jar executable: see http://stackoverflow.com/questions/21721119/creating-runnable-jar-with-gradle
+    manifest {
+        attributes (
+                'Main-Class': project.ext.get("{$project.name}-mainclass"),
+                // add classpath to Manifest; see http://stackoverflow.com/questions/30087427/add-classpath-in-manifest-file-of-jar-in-gradle
+                "Class-Path": ". $dependencyJarsDir/" + configurations.runtimeClasspath.collect { it.getName() }.join(" $dependencyJarsDir/")
+        )
+    }
+}
+
+jar.dependsOn copyJarsToLib
+jar.mustRunAfter copyJarsToLib
+docker.dependsOn jar
+dockerPrepare.mustRunAfter jar
+
+docker {
+    name = "${project.ext.company}/${project.name}:$version"
+    copySpec.from("build/libs").into("libs")
+    buildArgs(['JAR_NAME': jar.archiveFileName.get()])
+    dockerfile project(":").file('shared/Dockerfile')
+}

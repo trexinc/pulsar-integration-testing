@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+
+  main-consumer:
+    image: trexinc/main-consumer:1.0
+    environment:
+      TOPIC: internal/inbound/corona
+      PULSAR: $PULSAR
+    networks:
+      - local-pulsar-net
+
+networks:
+  local-pulsar-net:
+    external:
+      name: $PULSAR_NETWORK

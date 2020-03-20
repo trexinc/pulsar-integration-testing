@@ -1,0 +1,3 @@
+project.ext.set("{$project.name}-mainclass", 'CustomerProducer')
+
+apply from: "../shared/build.gradle"

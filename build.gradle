@@ -1,0 +1,39 @@
+plugins {
+    id 'com.palantir.docker' version '0.25.0' apply false
+}
+
+allprojects {
+    apply plugin: 'idea'
+    apply plugin: 'java'
+
+    repositories {
+    	mavenCentral()
+    }
+
+    dependencies {
+        //change slf4j-nop to slf4j-simple to get logs
+	    implementation group: 'org.slf4j', name: 'slf4j-nop', version: '1.7.30'
+        testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.0'
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging.showStandardStreams = true
+	}
+
+    ext {
+        company = "trexinc"
+        productVersion = "1.0"
+        pulsarVersion = '2.5.0'
+    }
+
+    sourceCompatibility = 1.8
+}
+
+dependencies {
+    testImplementation group: 'org.apache.pulsar', name: 'pulsar-client-admin', version: project.ext.pulsarVersion
+    testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.13.0'
+}
+
+test.dependsOn ':customer-producer:docker'
+test.dependsOn ':main-consumer:docker'
