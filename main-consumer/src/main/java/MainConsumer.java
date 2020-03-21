@@ -15,6 +15,7 @@ public class MainConsumer {
                 .subscriptionInitialPosition(SubscriptionInitialPosition.Latest)
                 .subscribe();
 
+        System.out.println("Consumer started.");
         consume();
 
         consumer.close();

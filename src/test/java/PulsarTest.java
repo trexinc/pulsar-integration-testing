@@ -129,7 +129,8 @@ public class PulsarTest {
     private DockerComposeContainer startConsumer(String pulsarNetworkName) {
         DockerComposeContainer consumerEnv = new DockerComposeContainer(new File("docker-compose/consumer.docker-compose.yml"))
                 .withEnv("PULSAR_NETWORK", pulsarNetworkName)
-                .withEnv("PULSAR", PULSAR);
+                .withEnv("PULSAR", PULSAR)
+                .waitingFor("main-consumer_1", Wait.forLogMessage(".*Consumer started.*", 1));
 
         consumerEnv.start();
         return consumerEnv;
