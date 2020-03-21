@@ -5,3 +5,4 @@ gradlew			text    eol=lf
 *.py			text    eol=lf
 
 *.jar           binary
+*.png           binary
