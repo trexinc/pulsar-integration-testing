@@ -83,14 +83,14 @@ public class PulsarTest {
 
     private void pulsarCustomerOnBoarding(PulsarAdmin pulsarAdmin, String customer) throws PulsarAdminException {
         pulsarAdmin.tenants().createTenant(customer, getGeneralTenantInfo(pulsarAdmin));
-        pulsarAdmin.namespaces().createNamespace(customer + "/inbound");
-        pulsarAdmin.topics().createNonPartitionedTopic(customer + "/inbound/corona");
+        pulsarAdmin.namespaces().createNamespace(customer + "/outbound");
+        pulsarAdmin.topics().createNonPartitionedTopic(customer + "/outbound/corona");
 
         FunctionConfig functionConfig = FunctionConfig.builder()
                 .name("in_router")
                 .tenant(customer)
-                .namespace("inbound")
-                .inputs(Collections.singletonList("persistent://" + customer + "/inbound/corona"))
+                .namespace("outbound")
+                .inputs(Collections.singletonList("persistent://" + customer + "/outbound/corona"))
                 .className("in_router.RoutingFunction")
                 .py("in_router.py").build();
         pulsarAdmin.functions().createFunction(functionConfig, "pulsar-function/in_router.py");

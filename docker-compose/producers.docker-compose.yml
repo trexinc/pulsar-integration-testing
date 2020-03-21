@@ -5,7 +5,7 @@ services:
   customer1-producer:
     image: trexinc/customer-producer:1.0
     environment:
-      TOPIC: customer1/inbound/corona
+      TOPIC: customer1/outbound/corona
       PULSAR: $PULSAR
     networks:
       - local-pulsar-net
@@ -13,7 +13,7 @@ services:
   customer2-producer:
     image: trexinc/customer-producer:1.0
     environment:
-      TOPIC: customer2/inbound/corona
+      TOPIC: customer2/outbound/corona
       PULSAR: $PULSAR
     networks:
       - local-pulsar-net
